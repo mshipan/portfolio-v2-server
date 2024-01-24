@@ -37,6 +37,9 @@ async function run() {
 
     // collection start
     const aboutMeCollection = client.db("portfolio-v2").collection("about-me");
+    const educationCollection = client
+      .db("portfolio-v2")
+      .collection("educations");
     // collection end
 
     //APIs start
@@ -75,6 +78,56 @@ async function run() {
         newAboutMe,
         options
       );
+      res.send(result);
+    });
+
+    // GET/view education Api
+    app.get("/educations", async (req, res) => {
+      const result = await educationCollection.find().toArray();
+      res.send(result);
+    });
+
+    // POST/Create an Education Api
+    app.post("/educations", async (req, res) => {
+      const newEducation = req.body;
+      const result = await educationCollection.insertOne(newEducation);
+      res.send(result);
+    });
+    // Get / View education by id
+    app.get("/education/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await educationCollection.findOne(query);
+      res.send(result);
+    });
+
+    // PUT/update education Api
+    app.put("/education/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateEducation = req.body;
+      const newEducation = {
+        $set: {
+          title: updateEducation.title,
+          starYear: updateEducation.starYear,
+          endYear: updateEducation.endYear,
+          description: updateEducation.description,
+        },
+      };
+      const result = await educationCollection.updateOne(
+        filter,
+        newEducation,
+        options
+      );
+      res.send(result);
+    });
+
+    // Delete education
+    app.delete("/education/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await educationCollection.deleteOne(query);
       res.send(result);
     });
     //APIs end
