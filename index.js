@@ -40,6 +40,7 @@ async function run() {
     const educationCollection = client
       .db("portfolio-v2")
       .collection("educations");
+    const skillsCollection = client.db("portfolio-v2").collection("skills");
     // collection end
 
     //APIs start
@@ -128,6 +129,55 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await educationCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // POST/Create an Skill Api
+    app.post("/skills", async (req, res) => {
+      const newSkill = req.body;
+      const result = await skillsCollection.insertOne(newSkill);
+      res.send(result);
+    });
+
+    // GET/view skill Api
+    app.get("/skills", async (req, res) => {
+      const result = await skillsCollection.find().toArray();
+      res.send(result);
+    });
+
+    // Get / View skill by id
+    app.get("/skill/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await skillsCollection.findOne(query);
+      res.send(result);
+    });
+
+    // PUT/update skill Api
+    app.put("/skill/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateSkill = req.body;
+      const newSkill = {
+        $set: {
+          skillName: updateSkill.skillName,
+          skillPercentage: updateSkill.skillPercentage,
+        },
+      };
+      const result = await skillsCollection.updateOne(
+        filter,
+        newSkill,
+        options
+      );
+      res.send(result);
+    });
+
+    // Delete skill api
+    app.delete("/skill/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await skillsCollection.deleteOne(query);
       res.send(result);
     });
     //APIs end
