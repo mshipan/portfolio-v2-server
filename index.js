@@ -5,10 +5,16 @@ const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
+// Import API modules
+const aboutMeApi = require("./apis/aboutMeApi");
+const educationsApi = require("./apis/educationsApi");
+const singleEducationApi = require("./apis/singleEducationApi");
+const skillsApi = require("./apis/skillsApi");
+const singleSkillApi = require("./apis/singleSkillApi");
+
 const corsConfig = {
   origin: "*",
   credentials: true,
-  // methods: ["GET", "POST", "PUT", "DELETE"],
   optionSuccessStatus: 200,
 };
 
@@ -37,149 +43,19 @@ async function run() {
 
     // collection start
     const aboutMeCollection = client.db("portfolio-v2").collection("about-me");
-    const educationCollection = client
+    const educationsCollection = client
       .db("portfolio-v2")
       .collection("educations");
     const skillsCollection = client.db("portfolio-v2").collection("skills");
     // collection end
 
-    //APIs start
+    // Apis Start
+    app.use("/about-me", aboutMeApi(aboutMeCollection));
+    app.use("/educations", educationsApi(educationsCollection));
+    app.use("/education", singleEducationApi(educationsCollection));
+    app.use("/skills", skillsApi(skillsCollection));
+    app.use("/skill", singleSkillApi(skillsCollection));
 
-    // Get/view about-me Api
-    app.get("/about-me", async (req, res) => {
-      const result = await aboutMeCollection.find().toArray();
-      res.send(result);
-    });
-
-    // PUT/update about-me Api
-    app.put("/about-me/:id", async (req, res) => {
-      const id = req.params.id;
-      const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true };
-      const updateAboutMe = req.body;
-      const newAboutMe = {
-        $set: {
-          name: updateAboutMe.name,
-          role: updateAboutMe.role,
-          about: updateAboutMe.about,
-          mobile: updateAboutMe.mobile,
-          email: updateAboutMe.email,
-          address: updateAboutMe.address,
-          website: updateAboutMe.website,
-          maplink: updateAboutMe.maplink,
-          watchTheVideo: updateAboutMe.watchTheVideo,
-          facebook: updateAboutMe.facebook,
-          twitter: updateAboutMe.twitter,
-          github: updateAboutMe.github,
-          linkedin: updateAboutMe.linkedin,
-        },
-      };
-      const result = await aboutMeCollection.updateOne(
-        filter,
-        newAboutMe,
-        options
-      );
-      res.send(result);
-    });
-
-    // GET/view education Api
-    app.get("/educations", async (req, res) => {
-      const result = await educationCollection.find().toArray();
-      res.send(result);
-    });
-
-    // POST/Create an Education Api
-    app.post("/educations", async (req, res) => {
-      const newEducation = req.body;
-      const result = await educationCollection.insertOne(newEducation);
-      res.send(result);
-    });
-    // Get / View education by id
-    app.get("/education/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await educationCollection.findOne(query);
-      res.send(result);
-    });
-
-    // PUT/update education Api
-    app.put("/education/:id", async (req, res) => {
-      const id = req.params.id;
-      const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true };
-      const updateEducation = req.body;
-      const newEducation = {
-        $set: {
-          title: updateEducation.title,
-          starYear: updateEducation.starYear,
-          endYear: updateEducation.endYear,
-          description: updateEducation.description,
-        },
-      };
-      const result = await educationCollection.updateOne(
-        filter,
-        newEducation,
-        options
-      );
-      res.send(result);
-    });
-
-    // Delete education
-    app.delete("/education/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await educationCollection.deleteOne(query);
-      res.send(result);
-    });
-
-    // POST/Create an Skill Api
-    app.post("/skills", async (req, res) => {
-      const newSkill = req.body;
-      const result = await skillsCollection.insertOne(newSkill);
-      res.send(result);
-    });
-
-    // GET/view skill Api
-    app.get("/skills", async (req, res) => {
-      const result = await skillsCollection.find().toArray();
-      res.send(result);
-    });
-
-    // Get / View skill by id
-    app.get("/skill/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await skillsCollection.findOne(query);
-      res.send(result);
-    });
-
-    // PUT/update skill Api
-    app.put("/skill/:id", async (req, res) => {
-      const id = req.params.id;
-      const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true };
-      const updateSkill = req.body;
-      const newSkill = {
-        $set: {
-          skillName: updateSkill.skillName,
-          skillPercentage: updateSkill.skillPercentage,
-        },
-      };
-      const result = await skillsCollection.updateOne(
-        filter,
-        newSkill,
-        options
-      );
-      res.send(result);
-    });
-
-    // Delete skill api
-    app.delete("/skill/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await skillsCollection.deleteOne(query);
-      res.send(result);
-    });
     //APIs end
 
     // Send a ping to confirm a successful connection
