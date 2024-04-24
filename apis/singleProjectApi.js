@@ -25,13 +25,15 @@ const singleprojectApi = (projectsCollection) => {
         projectBg: updateProject.projectBg,
         projectDescription: updateProject.projectDescription,
         projectGoals: updateProject.projectGoals,
+        technologyUsed: updateProject.technologyUsed,
+        projectFeatures: updateProject.projectFeatures,
         projectDuration: updateProject.projectDuration,
         startDate: updateProject.startDate,
         endDate: updateProject.endDate,
         liveLink: updateProject.liveLink,
         githubClient: updateProject.githubClient,
+        githubServer: updateProject.githubServer,
         conclusion: updateProject.conclusion,
-        projectFeatures: updateProject.projectFeatures,
       },
     };
     const result = await projectsCollection.updateOne(
