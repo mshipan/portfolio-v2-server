@@ -10,8 +10,8 @@ const blogsApi = (blogsCollection) => {
   });
 
   blogsRouter.post("/", async (req, res) => {
-    const newProject = req.body;
-    const result = await blogsCollection.insertOne(newProject);
+    const newBlog = req.body;
+    const result = await blogsCollection.insertOne(newBlog);
     res.send(result);
   });
   return blogsRouter;
