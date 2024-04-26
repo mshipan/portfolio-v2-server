@@ -17,6 +17,7 @@ const blogsApi = require("./apis/blogsApi");
 const singleBlogApi = require("./apis/singleBlogApi");
 const servicesApi = require("./apis/servicesApi");
 const singleServiceApi = require("./apis/singleServiceApi");
+const contactApi = require("./apis/contactApi");
 
 const corsConfig = {
   origin: "*",
@@ -56,6 +57,7 @@ async function run() {
     const projectsCollection = client.db("portfolio-v2").collection("projects");
     const blogsCollection = client.db("portfolio-v2").collection("blogs");
     const servicesCollection = client.db("portfolio-v2").collection("services");
+    const contactsCollection = client.db("portfolio-v2").collection("contacts");
     // collection end
 
     // Apis Start
@@ -70,6 +72,7 @@ async function run() {
     app.use("/blog", singleBlogApi(blogsCollection));
     app.use("/services", servicesApi(servicesCollection));
     app.use("/service", singleServiceApi(servicesCollection));
+    app.use("/contacts", contactApi(contactsCollection));
 
     //APIs end
 
