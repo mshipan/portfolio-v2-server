@@ -18,6 +18,9 @@ const singleBlogApi = require("./apis/singleBlogApi");
 const servicesApi = require("./apis/servicesApi");
 const singleServiceApi = require("./apis/singleServiceApi");
 const contactApi = require("./apis/contactApi");
+const singleContactApi = require("./apis/singleContactApi");
+const newsLettersApi = require("./apis/newsLetterApi");
+const singleNewsLetterApi = require("./apis/singleNewsLetterApi");
 
 const corsConfig = {
   origin: "*",
@@ -58,6 +61,9 @@ async function run() {
     const blogsCollection = client.db("portfolio-v2").collection("blogs");
     const servicesCollection = client.db("portfolio-v2").collection("services");
     const contactsCollection = client.db("portfolio-v2").collection("contacts");
+    const newsLettersCollection = client
+      .db("portfolio-v2")
+      .collection("newsLetters");
     // collection end
 
     // Apis Start
@@ -73,6 +79,9 @@ async function run() {
     app.use("/services", servicesApi(servicesCollection));
     app.use("/service", singleServiceApi(servicesCollection));
     app.use("/contacts", contactApi(contactsCollection));
+    app.use("/contact", singleContactApi(contactsCollection));
+    app.use("/newsLetters", newsLettersApi(newsLettersCollection));
+    app.use("/newsLetter", singleNewsLetterApi(newsLettersCollection));
 
     //APIs end
 

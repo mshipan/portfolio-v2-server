@@ -16,6 +16,16 @@ const contactApi = (contactsCollection) => {
     },
   });
 
+  // GET/view contacts Api
+  contactRouter.get("/", async (req, res) => {
+    const result = await contactsCollection
+      .find()
+      .sort({ createdAt: -1 })
+      .toArray();
+    res.send(result);
+  });
+
+  // Post/send mail contacts Api
   contactRouter.post("/", async (req, res) => {
     const { name, email, phone, subject, comment } = req.body;
 
@@ -40,8 +50,14 @@ const contactApi = (contactsCollection) => {
       }
     });
 
-    const newContact = req.body;
+    const newContact = { ...req.body, isNew: true };
     const result = await contactsCollection.insertOne(newContact);
+
+    // Set isNew to false for all other contacts
+    await contactsCollection.updateMany(
+      { _id: { $ne: result.insertedId } },
+      { $set: { isNew: false } }
+    );
     res.send(result);
   });
 
