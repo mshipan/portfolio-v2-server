@@ -23,9 +23,17 @@ const newsLettersApi = require("./apis/newsLetterApi");
 const singleNewsLetterApi = require("./apis/singleNewsLetterApi");
 
 const corsConfig = {
-  origin: "*",
+  origin: [
+    "http://localhost:5173",
+    "https://localhost:5173",
+    "https://portfolio-v2-de4b6.web.app",
+    "http://portfolio-v2-de4b6.web.app",
+    "portfolio-v2-de4b6.web.app",
+    "*",
+  ],
   credentials: true,
   optionSuccessStatus: 200,
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
 };
 
 //middlewares

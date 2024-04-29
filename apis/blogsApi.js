@@ -5,7 +5,10 @@ const blogsApi = (blogsCollection) => {
 
   // GET/view blogs Api
   blogsRouter.get("/", async (req, res) => {
-    const result = await blogsCollection.find().toArray();
+    const result = await blogsCollection
+      .find()
+      .sort({ createdAt: -1 })
+      .toArray();
     res.send(result);
   });
 

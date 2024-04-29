@@ -32,6 +32,9 @@ const aboutMeApi = (aboutMeCollection) => {
         twitter: updateAboutMe.twitter,
         github: updateAboutMe.github,
         linkedin: updateAboutMe.linkedin,
+        cvDriveLink: updateAboutMe.cvDriveLink,
+        resumeDriveLink: updateAboutMe.resumeDriveLink,
+        experience: updateAboutMe.experience,
       },
     };
     const result = await aboutMeCollection.updateOne(
