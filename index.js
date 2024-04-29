@@ -21,6 +21,7 @@ const contactApi = require("./apis/contactApi");
 const singleContactApi = require("./apis/singleContactApi");
 const newsLettersApi = require("./apis/newsLetterApi");
 const singleNewsLetterApi = require("./apis/singleNewsLetterApi");
+const commentApi = require("./apis/commentApi");
 
 const corsConfig = {
   origin: [
@@ -87,6 +88,7 @@ async function run() {
     app.use("/project", singleProjectApi(projectsCollection));
     app.use("/blogs", blogsApi(blogsCollection));
     app.use("/blog", singleBlogApi(blogsCollection));
+    app.use("/blog", commentApi(blogsCollection));
     app.use("/services", servicesApi(servicesCollection));
     app.use("/service", singleServiceApi(servicesCollection));
     app.use("/contacts", contactApi(contactsCollection));
